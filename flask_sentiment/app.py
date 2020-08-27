@@ -1,12 +1,14 @@
 import os
 import pickle
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
-from flask import Flask, render_template
+SECRET_KEY = os.urandom(32)
+from flask import Flask, request, render_template, redirect, url_for
 
 from sentiment_models import preprocess, vectorize, model
-  
+
 app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
+
 
 max_features = 40000
 max_sequence_length = 20
@@ -20,13 +22,29 @@ lstm_model_path = os.path.join(models_directory, 'best_lstm.h5')
 tokenizer = model.load_tokenizer(tokenizer_file_path)
 lstm_model = model.load_model(lstm_model_path)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('base.html')
+    result_dict = {}
+    if request.method == "POST":
+        form = request.form
+        user_query = form.get('user_query', 'ERROR: user_query not found')
+        sentiment_score = model.predict_sentiment(user_query, tokenizer, lstm_model)
+        print("User QUERY: ", user_query)
+        print("Sentimen SCORE: ", sentiment_score)
+        
+        result_dict['user_query'] = user_query
+        result_dict['sentiment_score'] = sentiment_score
 
-@app.route('/index')
-def about():
-    return 'about'
+        return render_template('base.html', result=result_dict)
+    
+    result_dict['user_query'] = 'BOS'
+    result_dict['sentiment_score'] = 'NaN'
+    return render_template('base.html', result=result_dict)
+
+@app.route('/predict', methods=['GET'])
+def predict():
+    
+    return render_template('base.html')
 
 @app.route('/<input_string>')
 def hello(input_string):

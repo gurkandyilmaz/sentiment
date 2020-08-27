@@ -33,7 +33,7 @@ def _remove_punc_nums_special_chars(tokens):
         lower_i = "İ".lower()
         if lower_i in token:
             token = re.sub(f'{lower_i}', 'i', token)
-        token = re.sub('[^a-zçşğöüİÖÜĞŞÇ]', ' ', token)
+        token = re.sub('[^a-zçşğıiöü]', ' ', token)
         cleaned_tokens[idx] = token.strip()
 
     return cleaned_tokens

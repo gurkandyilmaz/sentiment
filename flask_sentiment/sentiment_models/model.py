@@ -28,9 +28,13 @@ def load_model(model_path):
 
 
 def predict_sentiment(input_text, tokenizer, model):
+    print("RAW TEXT: ", input_text)
     processed_text = preprocess_data(input_text)
+    print("PROCESSED: ", processed_text)
     transformed_text = transform_to_sequence_of_integers([processed_text], tokenizer)
+    print("TRANSFORMED: ", transformed_text)
     padded_text = pad_sequences_of_integers(transformed_text)
+    print("PADDED: ", padded_text)
 
     prediction = model.predict(padded_text)
     # transform the result it is between 0.0 and 1.0 (sigmoid) or -1.0 and 1.0 (tanh)

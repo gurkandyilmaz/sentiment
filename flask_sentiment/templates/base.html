@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html >
+<html lang="tr">
 <!--From https://codepen.io/frytyler/pen/EGdtg-->
 <head>
   <meta charset="UTF-8">
-  <title>ML API</title>
+  <title>Sentimentim</title>
   <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
@@ -14,19 +14,28 @@
 
 <body>
  <div class="login">
-	<h1>Predict Salary Analysis</h1>
+	<h1>Turkish Sentiment Analyzer</h1>
 
      <!-- Main Input For Receiving Query to our ML -->
-    <form action='#' ethod="post">
-    	<input type="text" name="experience" placeholder="Experience" required="required" />
-        <input type="text" name="test_score" placeholder="Test Score" required="required" />
-		<input type="text" name="interview_score" placeholder="Interview Score" required="required" />
+     {% if result.user_query == 'BOS' %}
+     	<form method="POST">
+    		<input type="text" name="user_query" placeholder="Enter Your Text Here" />
+        	<button type="submit" class="btn btn-primary btn-block btn-large">Predict Sentiment</button>
+    	</form>
+    {% else %}
+    	<form method="POST">
+    		<input type="text" name="user_query" value="{{result.user_query}}" />
+        	<button type="submit" class="btn btn-primary btn-block btn-large">Predict Sentiment</button>
+    	</form>
 
-        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
-    </form>
-
+		<div class="result">
+  			<h1>Sentiment Score: {{ result.sentiment_score }}</h1>
+  		</div>
+    {% endif %}
+      
    <br>
    <br>
+
   
 
  </div>
@@ -34,3 +43,4 @@
 
 </body>
 </html>
+
