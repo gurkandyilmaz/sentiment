@@ -7,8 +7,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 from tensorflow import keras
 
-from preprocess import preprocess_data
-from vectorize import transform_to_sequence_of_integers, pad_sequences_of_integers
+from .preprocess import preprocess_data
+from .vectorize import transform_to_sequence_of_integers, pad_sequences_of_integers
 
 max_features = 40000
 max_sequence_length = 20
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     model_lstm = load_model(model_lstm_path)
     model_pooling = load_model(model_pooling_path)
 
-    test_text = "Satacağınız%&/( ürünüde+%&/ KARGOLAYACAĞINIZ paketinde içine tüküreyim."
+    test_text = "Satacağınız"
     result = predict_sentiment(test_text, tokenizer, model_lstm)
     print(result.numpy())
 

@@ -1,3 +1,4 @@
+import os
 import re
 
 
@@ -42,7 +43,7 @@ def _remove_stopwords(tokens):
     if stopwords:
         stopwords_list = stopwords
     else:
-        stopwords_list = _read_stopwords()
+        stopwords_list = _read_stopwords(filename)
     tokens_copy = tokens.copy()
     for token in tokens:
         if (token in stopwords_list) or (len(token) < 3):
@@ -51,10 +52,17 @@ def _remove_stopwords(tokens):
     return tokens_copy
 
 
-def _read_stopwords(filename='stopwords'):
+def _read_stopwords(filename):
     with open(filename, 'r') as file:
         data = file.readlines()
         for word in data:
             stopwords.append(word.strip('\n'))
  
     return stopwords
+
+abs_path = "/home/gurkan/Documents/projects_and_envs/projects/sentiment/flask_sentiment/sentiment_models"
+filename = os.path.join(abs_path,'stopwords')
+
+if __name__=='__main__':
+    filename='stopwords'
+
