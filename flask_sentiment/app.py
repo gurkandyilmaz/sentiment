@@ -2,7 +2,8 @@ import os
 import pickle
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 SECRET_KEY = os.urandom(32)
-from flask import Flask, request, render_template, redirect, url_for
+
+from flask import Flask, request, render_template, redirect, url_for, jsonify
 
 from sentiment_models import preprocess, vectorize, model
 
@@ -27,9 +28,9 @@ def index():
     result_dict = {}
     if request.method == "POST":
         form = request.form
-        user_query = form.get('user_query', 'ERROR: user_query not found')
+        user_query = form.get('user_query', 'ERROR: user_text not found')
         sentiment_score = model.predict_sentiment(user_query, tokenizer, lstm_model)
-        print("User QUERY: ", user_query)
+        print("User TEXT: ", user_query)
         print("Sentimen SCORE: ", sentiment_score)
         
         result_dict['user_query'] = user_query
@@ -41,16 +42,21 @@ def index():
     result_dict['sentiment_score'] = 'NaN'
     return render_template('base.html', result=result_dict)
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict/', methods=['POST'])
 def predict():
+    result_dict = {}
+    user_request = request.json
+    user_text = user_request.get('text', 'ERR: text not found.')
+    sentiment_score = model.predict_sentiment(user_text, tokenizer, lstm_model)
+    result_dict['text'] = user_text
+    result_dict['sentiment_score'] = str(sentiment_score.numpy()[0][0])
     
-    return render_template('base.html')
+    return jsonify(result_dict)
 
 @app.route('/<input_string>')
 def hello(input_string):
-    result = model.predict_sentiment(input_string, tokenizer, lstm_model)
-    return render_template('model/models.html', input_str=result)
-
+    
+    return "hişşşssss"
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
