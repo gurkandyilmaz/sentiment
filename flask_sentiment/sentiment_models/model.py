@@ -3,12 +3,8 @@ import pickle
 from time import time
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-
 import tensorflow as tf
 from tensorflow import keras
-
-from .preprocess import preprocess_data
-from .vectorize import transform_to_sequence_of_integers, pad_sequences_of_integers
 
 max_features = 40000
 max_sequence_length = 20
@@ -28,13 +24,13 @@ def load_model(model_path):
 
 
 def predict_sentiment(input_text, tokenizer, model):
-    print("RAW TEXT: ", input_text)
+    #print("RAW TEXT: ", input_text.encode('utf-8'))
     processed_text = preprocess_data(input_text)
-    print("PROCESSED: ", processed_text)
+    #print("PROCESSED: ", processed_text.encode('utf-8'))
     transformed_text = transform_to_sequence_of_integers([processed_text], tokenizer)
-    print("TRANSFORMED: ", transformed_text)
+    #print("TRANSFORMED: ", transformed_text)
     padded_text = pad_sequences_of_integers(transformed_text)
-    print("PADDED: ", padded_text)
+    #print("PADDED: ", padded_text)
 
     prediction = model.predict(padded_text)
     # transform the result it is between 0.0 and 1.0 (sigmoid) or -1.0 and 1.0 (tanh)
@@ -45,9 +41,17 @@ def predict_sentiment(input_text, tokenizer, model):
 
 
 if __name__ == '__main__':
-    tokenizer_path = os.path.join(os.getcwd(), 'tokenizer.pickle')
-    model_lstm_path = os.path.join(os.getcwd(), 'best_lstm.h5')
-    model_pooling_path = os.path.join(os.getcwd(), 'best_pooling.h5')
+    from preprocess import preprocess_data
+    from vectorize import transform_to_sequence_of_integers, pad_sequences_of_integers
+
+
+    #tokenizer_path = os.path.join(os.getcwd(), 'tokenizer.pickle')
+    #model_lstm_path = os.path.join(os.getcwd(), 'best_lstm.h5')
+    #model_pooling_path = os.path.join(os.getcwd(), 'best_pooling.h5')
+
+    tokenizer_path = 'tokenizer.pickle'
+    model_lstm_path = 'best_lstm.h5'
+    model_pooling_path = 'best_pooling.h5'
 
     # tokenizer takes list of texts.
     tokenizer = load_tokenizer(tokenizer_path)
@@ -56,7 +60,11 @@ if __name__ == '__main__':
 
     test_text = "Satacağınız"
     result = predict_sentiment(test_text, tokenizer, model_lstm)
-    print(result.numpy())
+    #print(result.numpy())
+
+else:
+    from .preprocess import preprocess_data
+    from .vectorize import transform_to_sequence_of_integers, pad_sequences_of_integers
 
 
 

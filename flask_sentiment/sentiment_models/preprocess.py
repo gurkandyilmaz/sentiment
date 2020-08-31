@@ -53,16 +53,15 @@ def _remove_stopwords(tokens):
 
 
 def _read_stopwords(filename):
-    with open(filename, 'r') as file:
+    with open(filename, 'r' , encoding='utf-8') as file:
         data = file.readlines()
         for word in data:
             stopwords.append(word.strip('\n'))
  
     return stopwords
 
-abs_path = "/home/gurkan/Documents/projects_and_envs/projects/sentiment/flask_sentiment/sentiment_models"
-filename = os.path.join(abs_path,'stopwords')
 
 if __name__=='__main__':
     filename='stopwords'
-
+else:
+    filename = os.path.abspath(os.path.join('flask_sentiment', 'sentiment_models', 'stopwords'))

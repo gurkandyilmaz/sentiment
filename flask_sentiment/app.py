@@ -16,7 +16,7 @@ max_sequence_length = 20
 embedding_dim = 16
 
 
-models_directory = os.path.join(os.getcwd(), 'sentiment_models')
+models_directory = os.path.join('flask_sentiment', 'sentiment_models')
 tokenizer_file_path = os.path.join(models_directory, 'tokenizer.pickle')
 lstm_model_path = os.path.join(models_directory, 'best_lstm.h5')
 
@@ -30,8 +30,8 @@ def index():
         form = request.form
         user_query = form.get('user_query', 'ERROR: user_text not found')
         sentiment_score = model.predict_sentiment(user_query, tokenizer, lstm_model)
-        print("User TEXT: ", user_query)
-        print("Sentimen SCORE: ", sentiment_score)
+        #print("User TEXT: ", user_query.encode('utf-8'))
+        #print("Sentimen SCORE: ", sentiment_score)
         
         result_dict['user_query'] = user_query
         result_dict['sentiment_score'] = sentiment_score
@@ -59,4 +59,4 @@ def hello(input_string):
     return "hişşşssss"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
