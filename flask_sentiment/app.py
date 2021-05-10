@@ -54,9 +54,8 @@ def predict():
     return jsonify(result_dict)
 
 @app.route('/<input_string>')
-def hello(input_string):
-    
-    return "hişşşssss"
+def hello(input_string):    
+    return "hissss"
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
